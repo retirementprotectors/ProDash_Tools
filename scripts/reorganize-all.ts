@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { mkdirSync, copyFileSync, readdirSync, statSync, renameSync, existsSync } from 'fs';
+import { mkdirSync, copyFileSync, readdirSync, statSync, renameSync, existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
 class ProjectReorganizer {
@@ -18,6 +18,9 @@ class ProjectReorganizer {
       
       // Move files to new structure
       this.moveFiles();
+      
+      // Clean up old directories
+      this.cleanup();
       
       // Create git commit
       this.commitChanges();
@@ -104,6 +107,42 @@ class ProjectReorganizer {
         console.warn(`Warning: Could not move ${src} to ${dest}:`, error);
       }
     });
+  }
+
+  private cleanup() {
+    console.log('🧹 Cleaning up old directories...');
+
+    const directoriesToClean = [
+      'src/plugins',
+      'src/templates',
+      'src/configs',
+      'src/processes',
+      'src/scripts',
+      'src/__pycache__',
+      'src/types',
+    ];
+
+    directoriesToClean.forEach(dir => {
+      const fullPath = join(this.basePath, dir);
+      if (existsSync(fullPath)) {
+        try {
+          rmSync(fullPath, { recursive: true, force: true });
+          console.log(`✅ Removed ${dir}`);
+        } catch (error) {
+          console.warn(`⚠️ Could not remove ${dir}:`, error);
+        }
+      }
+    });
+
+    // Clean up empty src directory if it exists
+    const srcPath = join(this.basePath, 'src');
+    if (existsSync(srcPath)) {
+      const contents = readdirSync(srcPath);
+      if (contents.length === 0) {
+        rmSync(srcPath, { recursive: true, force: true });
+        console.log('✅ Removed empty src directory');
+      }
+    }
   }
 
   private commitChanges() {
