@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { mkdirSync, copyFileSync, readdirSync, statSync } from 'fs';
+import { mkdirSync, copyFileSync, readdirSync, statSync, renameSync, existsSync } from 'fs';
 import { join } from 'path';
 
 class ProjectReorganizer {
@@ -54,26 +54,33 @@ class ProjectReorganizer {
 
     directories.forEach(dir => {
       const fullPath = join(this.basePath, dir);
-      mkdirSync(fullPath, { recursive: true });
+      if (!existsSync(fullPath)) {
+        mkdirSync(fullPath, { recursive: true });
+      }
     });
   }
 
   private moveFiles() {
     // Move src contents to new structure
     const srcPath = join(this.basePath, 'src');
+    if (!existsSync(srcPath)) {
+      console.warn('Source directory does not exist, skipping file moves');
+      return;
+    }
+
     const moveMap = {
-      'api': 'core/api',
-      'auth': 'core/auth',
-      'cache': 'core/cache',
-      'database': 'core/database',
-      'email': 'core/email',
+      'plugins/api': 'core/api',
+      'plugins/auth': 'core/auth',
+      'plugins/cache': 'core/cache',
+      'plugins/database': 'core/database',
+      'plugins/email': 'core/email',
       'plugins/crm': 'plugins/crm',
       'plugins/pdf': 'plugins/pdf',
       'plugins/search': 'plugins/search',
       'plugins/media': 'plugins/media',
-      'monitoring': 'services/monitoring',
-      'notification': 'services/notification',
-      'google-workspace': 'services/google-workspace',
+      'plugins/monitoring': 'services/monitoring',
+      'plugins/notification': 'services/notification',
+      'plugins/google-workspace': 'services/google-workspace',
       'templates': 'templates'
     };
 
@@ -82,20 +89,48 @@ class ProjectReorganizer {
       const destPath = join(this.basePath, dest);
       
       try {
-        if (statSync(sourcePath).isDirectory()) {
-          execSync(`cp -R "${sourcePath}/"* "${destPath}/"`);
+        if (existsSync(sourcePath) && statSync(sourcePath).isDirectory()) {
+          // Move all contents
+          const files = readdirSync(sourcePath);
+          files.forEach(file => {
+            const sourceFile = join(sourcePath, file);
+            const destFile = join(destPath, file);
+            if (!existsSync(destFile)) {
+              renameSync(sourceFile, destFile);
+            }
+          });
         }
       } catch (error) {
-        console.warn(`Warning: Could not move ${src} to ${dest}`);
+        console.warn(`Warning: Could not move ${src} to ${dest}:`, error);
       }
     });
   }
 
   private commitChanges() {
     try {
+      // Configure git user if not already configured
+      try {
+        execSync('git config user.name');
+      } catch {
+        execSync('git config user.name "ProDash Tools"');
+        execSync('git config user.email "prodash@tools.local"');
+      }
+
+      // Add all changes
       execSync('git add .');
-      execSync(`git commit -m "refactor: reorganize project structure\n\n- Reorganized directory structure\n- Created core, plugins, services directories\n- Integrated context-keeper system"`);
-      console.log('✅ Changes committed to git');
+      
+      // Check if there are changes to commit
+      const status = execSync('git status --porcelain').toString();
+      if (status) {
+        execSync(`git commit -m "refactor: reorganize project structure
+
+- Reorganized directory structure
+- Created core, plugins, services directories
+- Integrated context-keeper system"`);
+        console.log('✅ Changes committed to git');
+      } else {
+        console.log('No changes to commit');
+      }
     } catch (error) {
       console.error('❌ Failed to commit changes:', error);
     }
