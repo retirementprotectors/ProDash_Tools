@@ -113,13 +113,11 @@ class ProjectReorganizer {
     console.log('🧹 Cleaning up old directories...');
 
     const directoriesToClean = [
-      'src/plugins',
-      'src/templates',
-      'src/configs',
-      'src/processes',
-      'src/scripts',
-      'src/__pycache__',
-      'src/types',
+      'src',
+      '.DS_Store',
+      'node_modules/.package-lock.json',
+      'node_modules/.bin',
+      '__pycache__'
     ];
 
     directoriesToClean.forEach(dir => {
@@ -134,15 +132,19 @@ class ProjectReorganizer {
       }
     });
 
-    // Clean up empty src directory if it exists
-    const srcPath = join(this.basePath, 'src');
-    if (existsSync(srcPath)) {
-      const contents = readdirSync(srcPath);
-      if (contents.length === 0) {
-        rmSync(srcPath, { recursive: true, force: true });
-        console.log('✅ Removed empty src directory');
+    // Clean up empty directories
+    ['core', 'plugins', 'services', 'templates', 'context-keeper'].forEach(dir => {
+      const dirPath = join(this.basePath, dir);
+      if (existsSync(dirPath)) {
+        readdirSync(dirPath).forEach(subdir => {
+          const subdirPath = join(dirPath, subdir);
+          if (statSync(subdirPath).isDirectory() && readdirSync(subdirPath).length === 0) {
+            rmSync(subdirPath, { recursive: true, force: true });
+            console.log(`✅ Removed empty directory ${dir}/${subdir}`);
+          }
+        });
       }
-    }
+    });
   }
 
   private commitChanges() {
