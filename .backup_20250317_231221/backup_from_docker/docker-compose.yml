@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "54420:54420"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - context-data:/app/.context-keeper
+    environment:
+      - NODE_ENV=development
+      - PORT=54420
+      - PROJECT_NAME=prodash-tools
+    command: npm start
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:54420/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./dashboard/public
+      dockerfile: Dockerfile
+    ports:
+      - "53420:53420"
+    volumes:
+      - ./dashboard/public:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_BACKEND_PORT=54420
+      - VITE_PROJECT_NAME=prodash-tools
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  context-data:
+    driver: local 

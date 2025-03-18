@@ -1,61 +1,199 @@
-# ProDash Tools (Factory Factory)
+# ProDash Tools
 
-## Overview
-ProDash Tools is a meta-platform designed to accelerate and standardize the development of business applications. It serves as a "Factory Factory" - a platform that not only helps build applications but also continuously improves the development process itself. The primary goal is to never solve the same problem twice, ensuring maximum efficiency and consistency across all projects.
+A powerful CLI tool for creating and managing business web applications.
 
-## Key Features
-1. **Force Multiplier** - One developer can now accomplish what would normally require a team
-2. **Institutional Knowledge Preservation** - Your lessons learned are baked into the system
-3. **Accelerating Returns** - Each project makes the platform better for all future projects
-4. **Difficult to Replicate** - Competitors would need years to build this infrastructure
+## Features
+
+- 🚀 Project Templates
+  - Basic Web App
+  - Advanced Web App
+  - API Service
+- 🗄️ Database Management
+  - Local MongoDB Support
+  - Cloud Database Integration
+- 📦 Project Management
+  - Create Projects
+  - Import/Export Projects
+  - List Projects
+- 🔧 Template Management
+  - Create Templates
+  - Import/Export Templates
+  - List Templates
+- 💾 Backup Management
+  - Create Backups
+  - Restore from Backup
+  - List Backups
+- 🚢 Deployment Management
+  - Local Deployment
+  - Cloud Deployment Support
+  - Deployment History
+- 🛠️ System Management
+  - System Status
+  - Resource Cleanup
+  - Performance Monitoring
+
+## Prerequisites
+
+- Node.js >= 18.0.0
+- MongoDB >= 7.0.0
+- Git
+
+## Installation
+
+```bash
+# Install MongoDB (macOS)
+brew tap mongodb/brew
+brew install mongodb-community@7.0
+brew services start mongodb/brew/mongodb-community@7.0
+
+# Install ProDash Tools
+npm install -g prodash-tools
+```
+
+## Quick Start
+
+```bash
+# Initialize ProDash Tools
+prodash init
+
+# Create a new project
+prodash project -c my-project -t basic
+
+# List available projects
+prodash project -l
+
+# Create a backup
+prodash backup -c
+
+# Deploy a project
+prodash deploy my-project -e local
+
+# Check system status
+prodash manage -s
+```
+
+## Command Reference
+
+### Project Management
+
+```bash
+# Create a new project
+prodash project -c <name> [-t template] [-d database] [--description text]
+
+# List projects
+prodash project -l
+
+# Export a project
+prodash project -e <name> -o <path>
+
+# Import a project
+prodash project -i <path>
+```
+
+### Template Management
+
+```bash
+# Create a new template
+prodash template -g <name> [-b base] [-d description]
+
+# List templates
+prodash template -l
+
+# Export a template
+prodash template -e <name> -o <path>
+
+# Import a template
+prodash template -i <path>
+```
+
+### Backup Management
+
+```bash
+# Create a backup
+prodash backup -c [name]
+
+# List backups
+prodash backup -l
+
+# Restore from backup
+prodash backup -r <name>
+```
+
+### Deployment Management
+
+```bash
+# Deploy a project
+prodash deploy <project> [-e environment]
+
+# List deployments
+prodash deploy -l
+```
+
+### System Management
+
+```bash
+# Show system status
+prodash manage -s
+
+# Clean up resources
+prodash manage -c
+```
 
 ## Project Structure
+
 ```
-├── docs/               # Project documentation
-├── src/               # Source code
-│   ├── configs/       # Configuration templates and standards
-│   ├── docs/          # Documentation and guides
-│   │   └── guides/    # Interactive HTML guides
-│   ├── processes/     # Standard operating procedures
-│   ├── scripts/       # Automation and utility scripts
-│   ├── templates/     # Project templates and boilerplates
-│   └── plugins/       # Reusable plugin components
-└── tests/             # Test files
+.
+├── data/
+│   ├── projects/     # Project files
+│   ├── templates/    # Template files
+│   ├── backups/      # Backup archives
+│   ├── deployments/  # Deployment packages
+│   ├── logs/         # System logs
+│   └── temp/         # Temporary files
+├── src/
+│   ├── cli/         # CLI commands
+│   ├── core/        # Core functionality
+│   └── utils/       # Utility functions
+└── templates/       # Base templates
+    ├── basic/      # Basic web app
+    ├── advanced/   # Advanced web app
+    └── api/        # API service
 ```
 
-## Getting Started
-1. Follow the New Project Guide in `src/docs/guides/NewProjectGuide.html`
-2. Use the Builder Guide in `src/docs/guides/BuilderGuide.html` for project creation
-3. Consult the Factory Guide in `src/docs/guides/FactoryGuide.html` for platform maintenance
+## Development
 
-## Core Principles
-- Every solution should be captured for reuse
-- Maintain clean, well-documented templates
-- Regular updates to guides and documentation
-- Continuous improvement of the factory itself
-- Never solve the same problem twice
-- Build for maintainability and scalability
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/prodash-tools.git
+cd prodash-tools
 
-## Dependencies
-See `requirements.txt` for Python dependencies. Additional requirements:
-- Docker Desktop
-- GitHub Desktop
-- Visual Studio Code
-- Google Cloud Platform account
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
+```
 
 ## Contributing
-When working on new projects:
-1. Identify reusable components
-2. Document new solutions
-3. Update templates and guides
-4. Enhance automation scripts
 
-## Best Practices
-- Use conventional commits for version control
-- Follow coding standards in `.pre-commit-config.yaml`
-- Run tests before submitting changes
-- Keep documentation up-to-date
-- Document lessons learned and solutions
-- Share knowledge through templates and guides
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Remember: This is a living system that grows stronger with each project! 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 

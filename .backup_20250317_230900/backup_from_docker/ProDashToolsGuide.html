@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProDash Tools Guide</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #4299e1;
+            --text-color: #333;
+            --background-color: #f4f6f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            max-width: 250px;
+            margin-right: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        .guide-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .guide-section h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .guide-section p, .guide-section ul {
+            margin-bottom: 15px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="dashboard/public/src/assets/images/ProDash-High-Res Logo.png" alt="ProDash Logo" class="logo">
+            <h1>Tools Guide</h1>
+        </div>
+
+        <div class="guide-section">
+            <h2>Factory Module</h2>
+            <p>The Factory module in ProDash Tools automates the creation of components and configurations using predefined patterns and templates.</p>
+            
+            <h3>Core Concepts</h3>
+            <ul>
+                <li><strong>Templates</strong> - Reusable patterns for generating new components</li>
+                <li><strong>Plugins</strong> - Extend factory functionality for specific frameworks</li>
+                <li><strong>Projects</strong> - Encapsulated development workspaces with factory integration</li>
+            </ul>
+
+            <h3>Example: Component Factory</h3>
+            <pre><code>const factory = new ComponentFactory();
+const button = factory.create('button', {
+  variant: 'primary',
+  label: 'Click Me'
+});</code></pre>
+        </div>
+
+        <div class="guide-section">
+            <h2>Context Keeper</h2>
+            <p>The Context Keeper is a robust system for maintaining and managing chat contexts, backups, and system health monitoring. It runs directly in your ProDash_Tools root directory.</p>
+            
+            <h3>Key Features</h3>
+            <ul>
+                <li><strong>Context Management</strong> - Store and retrieve conversation contexts with rich metadata</li>
+                <li><strong>Automatic Backups</strong> - Scheduled backups every 60 minutes with manual backup option</li>
+                <li><strong>Health Monitoring</strong> - System health checks every 15 minutes</li>
+                <li><strong>Git Integration</strong> - Automatic repository detection and integration</li>
+                <li><strong>Context Capture</strong> - Automatic context capture every 5 minutes</li>
+                <li><strong>Dynamic Port Management</strong> - Consistent port assignment based on project name</li>
+            </ul>
+
+            <h3>Using Context Keeper</h3>
+            <p>Context Keeper tools can be accessed through both the web dashboard and command-line utilities:</p>
+            
+            <h4>Dashboard Access</h4>
+            <pre><code># Start the backend server
+npm start
+
+# In a new terminal, start the frontend
+cd dashboard/public && npm run dev</code></pre>
+            <p>The dashboard will be available at the dynamically assigned port (53xxx range), and the API will be accessible at its corresponding port (54xxx range).</p>
+            
+            <h4>Command Line Access</h4>
+            <p>After adding the command wrapper to your shell profile:</p>
+            <pre><code>source ~/Projects/ProDash_Tools/cli/command_wrapper.sh</code></pre>
+            
+            <p>Available commands:</p>
+            <pre><code># List all contexts
+context-tools list
+
+# Get a specific context
+context-tools get [id]
+
+# Create a manual backup
+context-tools backup
+
+# Restore from a backup
+context-tools restore [filename]
+
+# Check system health
+context-tools health</code></pre>
+
+            <h3>Port Configuration</h3>
+            <p>Context Keeper uses consistent port ranges based on your project name hash:</p>
+            <ul>
+                <li><strong>Frontend services</strong>: 53xxx range (calculated from project name)</li>
+                <li><strong>Backend services</strong>: 54xxx range (calculated from project name)</li>
+                <li><strong>Database services</strong>: 55xxx range (calculated from project name)</li>
+            </ul>
+            <p>For example, if your project hash is 420:</p>
+            <pre><code>Frontend: 53420
+Backend:  54420
+Database: 55420</code></pre>
+            <p>This ensures consistent port assignments across restarts and minimizes conflicts between different projects.</p>
+
+            <h3>Automatic Features</h3>
+            <ul>
+                <li><strong>Backups</strong>: Created automatically every 60 minutes</li>
+                <li><strong>Health Checks</strong>: Run every 15 minutes</li>
+                <li><strong>Context Capture</strong>: Performed every 5 minutes</li>
+                <li><strong>Git Detection</strong>: Automatic on startup</li>
+            </ul>
+
+            <h3>Creating New Projects</h3>
+            <p>To create a new project with Context Keeper integration:</p>
+            <pre><code>prodash-create my-new-project</code></pre>
+            <p>This will:</p>
+            <ul>
+                <li>Create a new project directory</li>
+                <li>Set up the necessary file structure</li>
+                <li>Configure dynamic port management</li>
+                <li>Link core Context Keeper utilities</li>
+                <li>Initialize Git repository (if needed)</li>
+            </ul>
+        </div>
+
+        <div class="guide-section">
+            <h2>Builder Module</h2>
+            <p>The Builder module provides a fluent API for constructing complex components and configurations with step-by-step object creation.</p>
+            
+            <h3>Key Features</h3>
+            <ul>
+                <li>Supports complex object construction</li>
+                <li>Provides method chaining</li>
+                <li>Enforces construction rules</li>
+            </ul>
+
+            <h3>Example: Component Builder</h3>
+            <pre><code>const component = new ComponentBuilder()
+  .setName('MyComponent')
+  .setType('container')
+  .addChild(childComponent)
+  .build();</code></pre>
+        </div>
+
+        <div class="guide-section">
+            <h2>Database Configuration</h2>
+            <p>ProDash Tools supports multiple database types with flexible configuration options.</p>
+            
+            <h3>Supported Databases</h3>
+            <ul>
+                <li>MySQL</li>
+                <li>PostgreSQL</li>
+                <li>SQLite</li>
+            </ul>
+
+            <h3>Configuration Example</h3>
+            <pre><code>{
+  "type": "postgresql",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "database": "prodash_db"
+}</code></pre>
+        </div>
+    </div>
+</body>
+</html> 

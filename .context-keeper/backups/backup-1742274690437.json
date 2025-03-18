@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "timestamp": 1742274690437,
+    "contextCount": 1,
+    "version": "1.0.0"
+  },
+  "contexts": [
+    {
+      "id": "1742274682288",
+      "content": {
+        "content": "Test context 1",
+        "metadata": {
+          "tags": [
+            "test"
+          ],
+          "priority": "high"
+        }
+      },
+      "timestamp": 1742274682288,
+      "metadata": {}
+    }
+  ]
+}

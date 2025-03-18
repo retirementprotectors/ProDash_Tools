@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+.env
+*.md
+.DS_Store
+context-keeper/dashboard/public/node_modules
+context-keeper/dashboard/public/dist 
